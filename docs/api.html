@@ -6252,7 +6252,23 @@ console.log(added)     <span class="comment">// [5]</span></code></pre></div><hr
   <span class="keyword">this</span>[i] = <span class="keyword">this</span>._cast(val);
   <span class="keyword">this</span>._markModified(i);
   <span class="keyword">return</span> <span class="keyword">this</span>;
-}</code></pre></div><div class="returns"><h4>Returns:</h4><ul><li><span class="types"> &lt;<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array">Array</a>&gt; </span><span>this</span></li></ul></div><div class="description"></div><hr class=""></div><div class="item method public"><h3 id="types_array_MongooseArray-toObject"><a href="#types_array_MongooseArray-toObject">MongooseArray#toObject(<code>options</code>)</a></h3><p>Returns a native js Array.</p><span class="showcode">show code</span><div class="sourcecode"><pre><code class="javascript">MongooseArray.prototype.toObject = <span class="function"><span class="keyword">function</span> <span class="params">(options)</span> {</span>
+}</code></pre></div><div class="returns"><h4>Returns:</h4><ul><li><span class="types"> &lt;<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array">Array</a>&gt; </span><span>this</span></li></ul></div><div class="description"><h4>Example:</h4>
+
+<pre><code><span class="comment">// given documents based on the following</span>
+<span class="keyword">var</span> Doc = mongoose.model(<span class="string">'Doc'</span>, <span class="keyword">new</span> Schema({ array: [Number] }));
+
+<span class="keyword">var</span> doc = <span class="keyword">new</span> Doc({ array: [<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>] })
+
+console.log(doc.array) <span class="comment">// [2,3,4]</span>
+
+doc.array.set(<span class="number">1</span>,<span class="string">"5"</span>);
+console.log(doc.array); <span class="comment">// [2,5,4] // properly cast to number</span>
+doc.save() <span class="comment">// the change is saved</span>
+
+<span class="comment">// VS not using array#set</span>
+doc.array[<span class="number">1</span>] = <span class="string">"5"</span>;
+console.log(doc.array); <span class="comment">// [2,"5",4] // no casting</span>
+doc.save() <span class="comment">// change is not saved</span></code></pre></div><hr class=""></div><div class="item method public"><h3 id="types_array_MongooseArray-toObject"><a href="#types_array_MongooseArray-toObject">MongooseArray#toObject(<code>options</code>)</a></h3><p>Returns a native js Array.</p><span class="showcode">show code</span><div class="sourcecode"><pre><code class="javascript">MongooseArray.prototype.toObject = <span class="function"><span class="keyword">function</span> <span class="params">(options)</span> {</span>
   <span class="keyword">if</span> (options &amp;&amp; options.depopulate &amp;&amp; <span class="keyword">this</span>[<span class="number">0</span>] <span class="keyword">instanceof</span> Document) {
     <span class="keyword">return</span> <span class="keyword">this</span>.map(<span class="function"><span class="keyword">function</span> <span class="params">(doc)</span> {</span>
       <span class="keyword">return</span> doc._id;
